@@ -1,5 +1,7 @@
 import sqlite3
-from sqlite3 import Connection
+
+def get_connection():
+    return sqlite3.connect('vocabulary.sqlite')
 
 
 def init_database():
@@ -12,13 +14,16 @@ def init_database():
         (id INTEGER PRIMARY KEY, word_id INTEGER, successes INTEGER, failures INTEGER, last_failure REAL,
         FOREIGN KEY(word_id) REFERENCES Words(id))''')
     cur.close()
-    return conn
+    conn.close()
 
 
-def create_new_word(connection: Connection, rows):
+
+def create_new_words(rows):
+    connection = get_connection()
     cursor = connection.cursor()
     for row in rows:
         cursor.execute('INSERT OR IGNORE INTO Words (word, transcription, translation) VALUES ( ?, ?, ? )',
-                       (row.word, row.transcription, row.translation))
+                       (row['word'], row['transcription'], row['translation']))
     connection.commit()
     cursor.close()
+    connection.close()
