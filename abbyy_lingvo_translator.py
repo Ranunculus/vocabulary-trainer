@@ -6,17 +6,17 @@ from abbyy_lingvo_auth import auth_token
 def parse_transcription(lingvo_universal_response):
     try:
         return lingvo_universal_response['Body'][0]['Markup'][0]['Text']
-    except:
+    except KeyError:
         return lingvo_universal_response['Body'][0]['Items'][0]['Markup'][0]['Markup'][0]['Text']
 
 
 def parse_translation(response):
     try:
         return response['Body'][1]['Items'][0]['Markup'][1]['Items'][0]['Markup'][0]['Markup'][0]['Text']
-    except:
+    except KeyError:
         try:
             return response['Body'][0]['Items'][0]['Markup'][2]['Items'][0]['Markup'][0]['Markup'][0]['Text']
-        except:
+        except KeyError:
             return response['Body'][2]['Items'][0]['Markup'][0]['Markup'][0]['Text']
 
 
